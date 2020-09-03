@@ -19,22 +19,22 @@ public class DBconn {
         String user = rb.getString("user");
         String password = rb.getString("password");
 
-        String jdbcURL = MessageFormat.format("jdbc:mysql://{0}:{1}/{2}",host,port,db);
-        conn = DriverManager.getConnection(jdbcURL,user,password);
+        String jdbcURL = MessageFormat.format("jdbc:mysql://{0}:{1}/{2}", host, port, db);
+        conn = DriverManager.getConnection(jdbcURL, user, password);
     }
 
     public static DBconn getInstance() {
-        if(instance == null){
-            try{
+        if (instance == null) {
+            try {
                 instance = new DBconn();
-            } catch (SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return instance;
     }
 
-    public  Connection connection(){
+    public Connection connection() {
         return conn;
     }
 }

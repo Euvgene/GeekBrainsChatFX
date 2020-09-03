@@ -1,18 +1,31 @@
 package sample.server.service;
 
+import sample.Connection.DBconn;
 import sample.server.inter.AuthService;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class AuthServiceImpl implements AuthService {
     public List<UserEntity> usersList;
+    private PreparedStatement ps;
 
-    public AuthServiceImpl() {
-        this.usersList = new LinkedList<>();
-        this.usersList.add(new UserEntity("login1", "pass1", "nick1"));
-        this.usersList.add(new UserEntity("login2", "pass2", "nick2"));
-        this.usersList.add(new UserEntity("login3", "pass3", "nick3"));
+    public AuthServiceImpl() throws SQLException {
+      usersList = new LinkedList<>();
+      ps = DBconn.getInstance()
+              .connection()
+              .prepareStatement("SELECT * FROM users");
+      ResultSet set = ps.executeQuery();
+      while (set.next()) {
+          UserEntity userEntity = new UserEntity();
+          userEntity.setLogin(set.getString("login"));
+          userEntity.setPassword(set.getString("password"));
+          userEntity.setNick(set.getString("nick"));
+          usersList.add(userEntity);
+      }
     }
 
     @Override
@@ -43,14 +56,25 @@ public class AuthServiceImpl implements AuthService {
         private String password;
         private String nick;
 
+        public void setLogin(String login) {
+            this.login = login;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public void setNick(String nick) {
+            this.nick = nick;
+        }
+
         public UserEntity(String login, String password, String nick) {
             this.login = login;
             this.password = password;
             this.nick = nick;
         }
 
-        public String getNick() {
-            return nick;
+        public UserEntity() {
         }
-    }
+      }
 }

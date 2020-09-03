@@ -7,6 +7,7 @@ import sample.server.inter.Server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class ServerImpl implements Server {
     public List<ClientHandler> clients;
     private AuthService authService;
 
-    public ServerImpl() {
+    public ServerImpl() throws SQLException {
         try {
             ServerSocket serverSocket = new ServerSocket(5115);
             authService = new AuthServiceImpl();
@@ -79,5 +80,3 @@ public class ServerImpl implements Server {
         return authService;
     }
 }
-
-
