@@ -8,10 +8,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Controller {
     @FXML
@@ -32,9 +32,10 @@ public class Controller {
     @FXML
     PasswordField passwordfiled;
 
-    Socket socket;
-    DataInputStream dis;
-    DataOutputStream dos;
+    private Socket socket;
+    private DataInputStream dis;
+    private DataOutputStream dos;
+    private File history;
     private int timeOut = 120000;
     private final String IP_ADRESS = "localhost";
     private final int PORT = 5115;
@@ -67,12 +68,14 @@ public class Controller {
                         String strMsg = dis.readUTF();
                         if (strMsg.startsWith("/authOk")) {
                             setAuthorized(true);
+                            loadHistory();
                             socket.setSoTimeout(0);
                             break;
                         } else if (authPanel.isVisible()) {
                             socket.setSoTimeout(timeOut - (int) (System.currentTimeMillis() - countTime));
 
                         }
+
                         textArea.appendText(strMsg + "\n");
                     }
                     while (true) {
@@ -81,6 +84,7 @@ public class Controller {
                             break;
                         }
                         textArea.appendText(strMsg + "\n");
+                        saveHistory();
                     }
                 } catch (IOException | ArrayIndexOutOfBoundsException e) {
                     System.out.println("disconnected");
@@ -129,6 +133,45 @@ public class Controller {
         }
     }
 
+    private void saveHistory() {
+        try {
+            history = new File("history.txt");
+            PrintWriter fileWriter = new PrintWriter(new FileWriter(history, false));
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(textArea.getText());
+            bufferedWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadHistory() throws IOException {
+        history = new File("history.txt");
+        if (!history.exists()) {
+            history.createNewFile();
+        }
+        int historySize = 20;
+        List<String> historyList = new ArrayList<>();
+        FileInputStream in = new FileInputStream(history);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+
+        String temp;
+        while ((temp = bufferedReader.readLine()) != null) {
+            historyList.add(temp);
+        }
+
+        if (historyList.size() > historySize) {
+            for (int i = historyList.size() - historySize; i < historyList.size(); i++) {
+                textArea.appendText(historyList.get(i) + "\n");
+            }
+        } else {
+            for (int i = 0; i < historyList.size(); i++) {
+                textArea.appendText(historyList.get(i) + "\n");
+            }
+        }
+    }
+
     @FXML
     void disableTextInput(KeyEvent event) {
         textArea.editableProperty().setValue(false);
@@ -139,4 +182,3 @@ public class Controller {
         textArea.editableProperty().setValue(false);
     }
 }
-
