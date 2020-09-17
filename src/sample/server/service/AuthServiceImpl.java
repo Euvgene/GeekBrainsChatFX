@@ -1,5 +1,8 @@
 package sample.server.service;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import sample.Connection.DBconn;
 import sample.server.inter.AuthService;
 
@@ -12,31 +15,31 @@ import java.util.List;
 public class AuthServiceImpl implements AuthService {
     public List<UserEntity> usersList;
     private PreparedStatement ps;
+    public static final Logger LOGGER = LogManager.getLogger(AuthServiceImpl.class);
 
     public AuthServiceImpl() throws SQLException {
-      usersList = new LinkedList<>();
-      ps = DBconn.getInstance()
-              .connection()
-              .prepareStatement("SELECT * FROM users");
-      ResultSet set = ps.executeQuery();
-      while (set.next()) {
-          UserEntity userEntity = new UserEntity();
-          userEntity.setLogin(set.getString("login"));
-          userEntity.setPassword(set.getString("password"));
-          userEntity.setNick(set.getString("nick"));
-          usersList.add(userEntity);
-      }
+        usersList = new LinkedList<>();
+        ps = DBconn.getInstance()
+                .connection()
+                .prepareStatement("SELECT * FROM users");
+        ResultSet set = ps.executeQuery();
+        while (set.next()) {
+            UserEntity userEntity = new UserEntity();
+            userEntity.setLogin(set.getString("login"));
+            userEntity.setPassword(set.getString("password"));
+            userEntity.setNick(set.getString("nick"));
+            usersList.add(userEntity);
+        }
     }
 
     @Override
     public void start() {
-        System.out.println("Server is run");
+        LOGGER.log(Level.INFO, "Server is run");
     }
 
     @Override
     public String getNick(String login, String password) {
         for (UserEntity u : usersList) {
-
             if (u.login.equals(login) && u.password.equals(password)) {
                 return u.nick;
             }
@@ -47,8 +50,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void stop() {
-        System.out.println("Сервис аутентификации остановлен");
-
+        LOGGER.log(Level.INFO, "Service auth stop");
     }
 
     public class UserEntity {
@@ -68,13 +70,7 @@ public class AuthServiceImpl implements AuthService {
             this.nick = nick;
         }
 
-        public UserEntity(String login, String password, String nick) {
-            this.login = login;
-            this.password = password;
-            this.nick = nick;
-        }
-
         public UserEntity() {
         }
-      }
+    }
 }

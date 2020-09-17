@@ -1,0 +1,21 @@
+2020-09-16 21:34:21 INFO  AuthServiceImpl:37 - Server is run
+2020-09-16 21:34:21 INFO  ServerImpl:29 - Wait join clients
+2020-09-16 21:34:26 INFO  ServerImpl:31 - Client join
+2020-09-16 21:34:26 INFO  ServerImpl:29 - Wait join clients
+2020-09-16 21:34:26 INFO  ClientHandler:58 - 3 join to chat
+2020-09-16 21:34:26 INFO  ServerImpl:79 - /clients 3 
+2020-09-16 21:34:38 INFO  ServerImpl:31 - Client join
+2020-09-16 21:34:38 INFO  ServerImpl:29 - Wait join clients
+2020-09-16 21:34:38 INFO  ClientHandler:58 - nick1 join to chat
+2020-09-16 21:34:38 INFO  ServerImpl:79 - /clients 3 nick1 
+2020-09-16 21:34:52 INFO  ClientHandler:106 - nick1 to all : Привет
+2020-09-16 21:35:07 INFO  ClientHandler:106 - 3 to all : Приветище! что делаешь? 
+2020-09-16 21:35:10 INFO  ClientHandler:106 - nick1 to all : учусь
+2020-09-16 21:35:37 INFO  ClientHandler:123 - Personal from 3 to nick1:пойдем водочки накатим для рывка? 
+2020-09-16 21:35:47 INFO  ClientHandler:123 - Personal from nick1 to 3:пфф фигня вопрос
+2020-09-16 21:35:53 INFO  ClientHandler:106 - nick1 to all : Бегу
+2020-09-16 21:36:00 INFO  ClientHandler:106 - 3 to all : наливаю
+2020-09-16 21:36:09 INFO  ServerImpl:79 - /clients 3 
+2020-09-16 21:36:09 INFO  ClientHandler:139 - nick1- exit from chat
+2020-09-16 21:36:13 INFO  ServerImpl:79 - /clients 
+2020-09-16 21:36:13 INFO  ClientHandler:139 - 3- exit from chat

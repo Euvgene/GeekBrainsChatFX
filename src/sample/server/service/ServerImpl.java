@@ -1,5 +1,8 @@
 package sample.server.service;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import sample.server.handler.ClientHandler;
 import sample.server.inter.AuthService;
 import sample.server.inter.Server;
@@ -14,6 +17,7 @@ import java.util.List;
 public class ServerImpl implements Server {
     public List<ClientHandler> clients;
     private AuthService authService;
+    public static final Logger LOGGER = LogManager.getLogger(ServerImpl.class);
 
     public ServerImpl() throws SQLException {
         try {
@@ -22,13 +26,13 @@ public class ServerImpl implements Server {
             authService.start();
             clients = new LinkedList<>();
             while (true) {
-                System.out.println("Wait join clients");
+                LOGGER.log(Level.INFO, "Wait join clients");
                 Socket socket = serverSocket.accept();
-                System.out.println("Client join");
+                LOGGER.log(Level.INFO, "Client join");
                 new ClientHandler(this, socket);
             }
         } catch (IOException e) {
-            System.out.println("Problem in server");
+            LOGGER.log(Level.ERROR, "Client join error", e);
         } finally {
             if (authService != null) {
                 authService.stop();
@@ -72,6 +76,7 @@ public class ServerImpl implements Server {
         for (ClientHandler o : clients) {
             sb.append(o.getNick() + " ");
         }
+        LOGGER.log(Level.INFO, sb.toString());
         broadcastMsg(sb.toString());
     }
 

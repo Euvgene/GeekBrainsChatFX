@@ -1,4 +1,12 @@
 /clients 3 
-3: Добрый день!
-3: Хорошего Вам настроения.
+nick1 join to chat
+/clients 3 nick1 
+nick1: Привет
+3: Приветище! что делаешь? 
+nick1: учусь
+Personal to nick1: пойдем водочки накатим для рывка? 
+Personal from nick1: пфф фигня вопрос
+nick1: Бегу
+3: наливаю
 /clients 3 
+nick1: exit from chat
